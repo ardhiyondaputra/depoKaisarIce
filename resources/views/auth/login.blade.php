@@ -1,99 +1,85 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
 
-                <div class="card-header">Login</div>
+<div class="container vh-100 d-flex justify-content-center align-items-center">
 
-                <div class="card-body">
+    <div class="text-center w-100">
 
-                    <form method="POST" action="{{ route('login.process') }}">
-                        @csrf
+        {{-- LOGO --}}
+        <img src="{{ asset('images/LOGO DEPO KAISAR ICE.svg') }}"
+             style="width:110px"
+             class="mb-3">
 
-                        {{-- USERNAME --}}
-                        <div class="row mb-3">
-                            <label for="username"
-                                   class="col-md-4 col-form-label text-md-end">
-                                Username
-                            </label>
+        {{-- TITLE --}}
+        <h5 class="fw-semibold">Depo Kaisar Ice</h5>
 
-                            <div class="col-md-6">
-                                <input id="username"
-                                       type="text"
-                                       class="form-control @error('username') is-invalid @enderror"
-                                       name="username"
-                                       value="{{ old('username') }}"
-                                       required
-                                       autofocus>
+        <h1 class="fw-bold mb-2">Login Sistem</h1>
 
-                                @error('username')
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+        <p class="text-muted mb-4">
+            Silakan login untuk mengakses sistem manajemen depo.
+        </p>
 
-                        {{-- PASSWORD --}}
-                        <div class="row mb-3">
-                            <label for="password"
-                                   class="col-md-4 col-form-label text-md-end">
-                                Password
-                            </label>
 
-                            <div class="col-md-6">
-                                <input id="password"
-                                       type="password"
-                                       class="form-control @error('password') is-invalid @enderror"
-                                       name="password"
-                                       required>
+        {{-- CARD LOGIN --}}
+        <div class="card shadow border-0 mx-auto"
+             style="max-width:420px; border-radius:15px;">
 
-                                @error('password')
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+            <div class="card-body p-4">
 
-                        {{-- REMEMBER ME --}}
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
 
-                                    <input class="form-check-input"
-                                           type="checkbox"
-                                           name="remember"
-                                           id="remember">
 
-                                    <label class="form-check-label" for="remember">
-                                        Remember Me
-                                    </label>
+                    {{-- USERNAME --}}
+                    <div class="mb-3 text-start">
+                        <label class="form-label fw-semibold">
+                            Username *
+                        </label>
 
-                                </div>
-                            </div>
-                        </div>
+                        <input type="text"
+                               name="username"
+                               class="form-control"
+                               required>
+                    </div>
 
-                        {{-- BUTTON LOGIN --}}
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
 
-                                <button type="submit"
-                                        class="btn btn-primary">
-                                    Login
-                                </button>
+                    {{-- PASSWORD --}}
+                    <div class="mb-3 text-start">
+                        <label class="form-label fw-semibold">
+                            Password *
+                        </label>
 
-                            </div>
-                        </div>
+                        <input type="password"
+                               name="password"
+                               class="form-control"
+                               required>
+                    </div>
 
-                    </form>
 
-                </div>
+                    <div class="d-flex justify-content-between mb-3">
+
+                        <a href="{{ route('password.recovery.form') }}">
+                            Lupa Password?
+                        </a>
+
+                    </div>
+
+
+                    {{-- BUTTON --}}
+                    <button type="submit"
+                            class="btn btn-dark w-100 rounded-pill">
+                        Login
+                    </button>
+
+                </form>
+
             </div>
+
         </div>
+
     </div>
+
 </div>
+
 @endsection

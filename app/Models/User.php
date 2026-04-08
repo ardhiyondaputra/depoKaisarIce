@@ -13,11 +13,13 @@ class User extends Authenticatable
     public $incrementing = true;
 
     protected $fillable = [
-        'username',
-        'password',
-        'role',
-        'status'
-    ];
+    'username',
+    'password',
+    'role',
+    'status',
+    'recovery_key',
+    'must_change_password'
+];
 
     protected $hidden = [
         'password'

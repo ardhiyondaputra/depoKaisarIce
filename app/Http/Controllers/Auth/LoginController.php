@@ -37,4 +37,15 @@ class LoginController extends Controller
             'status' => 'aktif',
         ];
     }
+
+    protected function authenticated($request, $user)
+{
+    if ($user->must_change_password) {
+
+        return redirect()->route('password.change.form');
+
+    }
+
+    return redirect()->intended($this->redirectTo);
+}
 }
