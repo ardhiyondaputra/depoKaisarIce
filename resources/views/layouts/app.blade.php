@@ -54,7 +54,7 @@
         </a>
     </li>
 @else
-    <li class="nav-item dropdown">
+    {{-- <li class="nav-item dropdown">
         <a id="navbarDropdown"
            class="nav-link dropdown-toggle"
            href="#"
@@ -81,7 +81,7 @@
             </form>
 
         </div>
-    </li>
+    </li> --}}
 @endguest
                     </ul>
                 </div>

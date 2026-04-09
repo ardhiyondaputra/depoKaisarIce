@@ -24,4 +24,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password'
     ];
+
+    protected $casts = [
+        'password' => 'hashed',
+    ];
+
+    protected $attributes = [
+        'status' => 'aktif',
+    ];
 }

@@ -14,7 +14,7 @@ return new class extends Migration
 
             $table->string('username', 30)->unique();
 
-            $table->string('password', 255);
+            $table->string('password', 60);
 
             $table->enum('role', ['super admin', 'admin'])->nullable();
 
