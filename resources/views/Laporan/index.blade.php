@@ -17,46 +17,44 @@
                 </div>
                 
                 <div class="px-4 pb-4">
-                    <div class="row g-3 mb-4 align-items-end p-3 rounded-4 bg-light border-0">
-                        <div class="col-md-4">
-                            <label class="form-label small fw-bold text-muted">Filter Berdasarkan Bulan</label>
-                            <select class="form-select rounded-3 border-0 shadow-sm">
-                            </select>
+                    <form action="#" method="GET" class="row g-3 mb-4 align-items-end p-4 rounded-4 bg-light border-0 mx-0">
+                        <div class="col-md-3">
+                            <label class="form-label small fw-bold text-muted">Dari Tanggal</label>
+                            <input type="date" name="start_date" class="form-control rounded-3 border-0 shadow-sm">
                         </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label small fw-bold text-muted">Sampai Tanggal</label>
+                            <input type="date" name="end_date" class="form-control rounded-3 border-0 shadow-sm">
+                        </div>
+
                         <div class="col-md-4">
                             <label class="form-label small fw-bold text-muted">Kategori Laporan</label>
-                            <select class="form-select rounded-3 border-0 shadow-sm">
+                            <select class="form-select rounded-3 border-0 shadow-sm text-muted">
                                 <option selected>Semua Aktivitas</option>
                                 <option>Barang Masuk</option>
                                 <option>Barang Keluar / Distribusi</option>
                             </select>
                         </div>
+
                         <div class="col-md-2">
-                            <button class="btn btn-outline-dark w-100 rounded-3 shadow-sm">
+                            <button type="submit" class="btn btn-dark w-100 rounded-3 shadow-sm fw-bold">
                                 <i class="bi bi-filter me-1"></i> Terapkan
                             </button>
                         </div>
-                    </div>
+                    </form>
 
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
                             <thead class="table-light">
                                 <tr>
-                                    <th class="border-0 px-3 py-3 rounded-start">Periode</th>
+                                    <th class="border-0 px-3 py-3 rounded-start">Periode Rentang Waktu</th>
                                     <th class="border-0 py-3">Total Masuk</th>
                                     <th class="border-0 py-3">Total Keluar</th>
-                                    <th class="border-0 py-3">Selisih Stok</th>
-                                    <th class="border-0 py-3 rounded-end text-end px-3">Status Laporan</th>
+                                    <th class="border-0 py-3 text-center">Selisih Stok</th>
+                                    <th class="border-0 py-3 rounded-end text-end px-3">Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="5" class="text-center py-5 text-muted">
-                                        <i class="bi bi-search mb-2 d-block fs-2"></i>
-                                        Silakan pilih parameter laporan untuk menampilkan data.
-                                    </td>
-                                </tr>
-                            </tbody>
                         </table>
                     </div>
                 </div>

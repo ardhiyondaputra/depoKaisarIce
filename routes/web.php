@@ -70,20 +70,30 @@ Route::post('/change-password',
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
     Route::get('/profil', [ProfilController::class, 'edit'])->name('profile.edit');
     Route::put('/profil/update', [ProfilController::class, 'update'])->name('profil.update');
 
     Route::get('/superadmin/data-admin', [DataAdminController::class, 'index'])->name('DataAdmin.index');
     Route::post('/superadmin/data-admin/store', [DataAdminController::class, 'store'])->name('DataAdmin.store');
     Route::put('/superadmin/data-admin/{id}', [DataAdminController::class, 'update'])->name('DataAdmin.update');
+    Route::delete('/admin/data-admin/{id}', [DataAdminController::class, 'destroy'])->name('DataAdmin.destroy');
 
     Route::get('/admin/produk', [ProdukController::class, 'index'])->name('produk.index');
+
     Route::get('/admin/supplier', [SupplierController::class, 'index'])->name('supplier.index');
+
     Route::get('/admin/pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
+
     Route::get('/admin/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
+
     Route::get('/admin/barang-masuk', [TransaksiController::class, 'masuk'])->name('barang_masuk.index');
+
     Route::get('/admin/distribusi', [TransaksiController::class, 'distribusi'])->name('distribusi.index');
+
     Route::get('/admin/info-stok', [StokController::class, 'info'])->name('info_stok.index');
+
     Route::get('/admin/riwayat-stok', [StokController::class, 'riwayat'])->name('riwayat_stok.index');
+
     Route::get('/admin/laporan', [LaporanController::class, 'index'])->name('laporan.index');
 });

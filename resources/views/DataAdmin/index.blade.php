@@ -19,13 +19,13 @@
                 </div>
                 
                 <div class="table-responsive px-4 pb-4">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover align-middle w-100">
                         <thead class="table-light">
                             <tr>
-                                <th class="border-0 px-3 py-3 rounded-start">Username</th>
-                                <th class="border-0 py-3">Role</th>
-                                <th class="border-0 py-3 text-center">Status</th>
-                                <th class="border-0 py-3 text-end px-4">Aksi</th>
+                                <th class="border-0 px-3 py-3 rounded-start" style="width: 40%;">Username</th>
+                                <th class="border-0 py-3 text-center" style="width: 20%;">Role</th>
+                                <th class="border-0 py-3 text-center" style="width: 20%;">Status</th>
+                                <th class="border-0 py-3 text-center px-4" style="width: 20%;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,21 +40,46 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td><span class="badge rounded-pill px-3 py-2 bg-primary-subtle text-primary">{{ strtoupper($admin->role) }}</span></td>
+                                <td class="text-center">
+                                    <span class="badge rounded-pill px-3 py-2 bg-primary-subtle text-primary">
+                                        {{ strtoupper($admin->role) }}
+                                    </span>
+                                </td>
                                 <td class="text-center">
                                     <span class="fw-bold small {{ $admin->status == 'aktif' ? 'text-success' : 'text-danger' }}">
                                         <i class="bi bi-circle-fill me-1" style="font-size: 7px;"></i> {{ ucfirst($admin->status) }}
                                     </span>
                                 </td>
-                                <td class="text-end px-3">
-                                    <button class="btn btn-sm btn-light rounded-pill px-3 border shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $admin->id_user }}">Edit</button>
+                                <td class="text-center px-3">
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <button class="btn btn-sm btn-light rounded-pill px-3 border shadow-sm fw-bold" 
+                                                style="height: 32px; display: flex; align-items: center;"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalEdit{{ $admin->id_user }}">
+                                            Edit
+                                        </button>
+                                        
+                                        <form action="{{ route('DataAdmin.destroy', $admin->id_user) }}" 
+                                            method="POST" 
+                                            class="m-0" 
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus admin ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" 
+                                                    class="btn btn-sm btn-outline-danger rounded-pill px-3 shadow-sm fw-bold"
+                                                    style="height: 32px; display: flex; align-items: center;">
+                                                <i class="bi bi-trash me-1"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
 
                             <div class="modal fade" id="modalEdit{{ $admin->id_user }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content rounded-4 border-0 shadow">
-                                        <form action="{{ route('DataAdmin.update', $admin->id_user) }}" method="POST">                                            @csrf
+                                        <form action="{{ route('DataAdmin.update', $admin->id_user) }}" method="POST">
+                                            @csrf
                                             @method('PUT')
                                             <div class="modal-header border-0 p-4">
                                                 <h5 class="fw-bold">Edit User</h5>
@@ -81,7 +106,6 @@
                                                             class="form-control rounded-3 pe-5"
                                                             placeholder="Kosongkan jika tidak ganti"
                                                             autocomplete="new-password">
-                                                        
                                                         <div class="position-absolute end-0 me-3" 
                                                             style="cursor: pointer; z-index: 10;" 
                                                             onclick="togglePro('pw{{ $admin->id_user }}', 'ic{{ $admin->id_user }}')">
@@ -121,7 +145,8 @@
                         <input type="text" name="username" class="form-control rounded-3" placeholder="Masukkan username" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Password</label> <div class="position-relative d-flex align-items-center">
+                        <label class="form-label small fw-bold">Password</label>
+                        <div class="position-relative d-flex align-items-center">
                             <input type="password" 
                                 name="password" 
                                 id="pwTambah" 
@@ -129,7 +154,6 @@
                                 placeholder="Masukkan password"
                                 required 
                                 autocomplete="new-password">
-                            
                             <div class="position-absolute end-0 me-3" 
                                 style="cursor: pointer; z-index: 10;" 
                                 onclick="togglePro('pwTambah', 'icTambah')">
@@ -168,12 +192,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const form = modal.querySelector('form');
             if (form) {
                 form.reset();
-                
                 const passwordInputs = modal.querySelectorAll('input[name="password"]');
                 passwordInputs.forEach(input => {
                     input.type = 'password';
                 });
-                
                 const icons = modal.querySelectorAll('.bi-eye-slash');
                 icons.forEach(icon => {
                     icon.classList.replace('bi-eye-slash', 'bi-eye');

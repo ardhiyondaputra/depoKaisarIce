@@ -8,7 +8,11 @@
                 <p class="opacity-75 mb-4" style="max-width: 500px;">
                     Dashboard ini menampilkan ringkasan operasional sistem. Pantau aktivitas sistem dengan cepat melalui halaman ini.
                 </p>
-                <button class="btn btn-light rounded-pill px-4 fw-bold shadow-sm">Lihat Laporan</button>
+                @if(Auth::user()->role === 'admin')
+                <a href="{{ route('laporan.index') }}" class="btn btn-light rounded-pill px-4 fw-bold shadow-sm text-decoration-none">
+                    Lihat Laporan
+                </a>
+                @endif
             </div>
             @endif
 

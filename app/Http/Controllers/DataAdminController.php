@@ -63,4 +63,28 @@ class DataAdminController extends Controller
 
         return back()->with('success', 'Data admin berhasil diperbarui!');
     }
+
+    public function destroy($id)
+    {
+        if (Auth::user()->role !== 'super admin') {
+            abort(403);
+        }
+
+        $admin = User::where('id_user', $id)->first();
+
+        if (!$admin) {
+            return back()->with('error', 'Admin tidak ditemukan!');
+        }
+
+        // Cek apakah admin sudah punya histori transaksi
+        // $hasActivity = $admin->transaksi()->exists(); 
+
+        // if ($hasActivity) {
+        //     return back()->with('error', 'Admin tidak dapat dihapus karena sudah memiliki riwayat transaksi/aktivitas sistem!');
+        // }
+
+        $admin->delete();
+
+        return back()->with('success', 'Admin berhasil dihapus!');
+    }
 }

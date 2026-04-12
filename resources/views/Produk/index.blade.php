@@ -20,11 +20,11 @@
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th class="border-0 px-3 py-3 rounded-start">No</th>
-                                <th class="border-0 py-3">Nama Produk</th>
-                                <th class="border-0 py-3">Stok Saat Ini</th>
-                                <th class="border-0 py-3">Harga Satuan</th>
-                                <th class="border-0 py-3 rounded-end text-end px-3">Aksi</th>
+                                <th class="border-0 px-3 py-3 rounded-start" style="width: 20%;">No</th>
+                                <th class="border-0 py-3" style="width: 20%;">Nama Produk</th>
+                                <th class="border-0 py-3" style="width: 20%;">Stok Saat Ini</th>
+                                <th class="border-0 py-3" style="width: 20%;">Harga Satuan</th>
+                                <th class="border-0 py-3 rounded-end text-end px-3" style="width: 10%;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
