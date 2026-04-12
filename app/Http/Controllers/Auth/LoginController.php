@@ -39,13 +39,13 @@ class LoginController extends Controller
     }
 
     protected function authenticated($request, $user)
-{
-    if ($user->must_change_password) {
+    {
+        if ($user->must_change_password) {
 
-        return redirect()->route('password.change.form');
+            return redirect()->route('password.change.form');
 
+        }
+
+        return redirect()->intended($this->redirectTo);
     }
-
-    return redirect()->intended($this->redirectTo);
-}
 }

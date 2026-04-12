@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('user', function (Blueprint $table) {
 
-            $table->string('recovery_key', 50)->nullable()->after('password');
+            $table->string('recovery_key', 7)->nullable()->after('password');
 
             $table->boolean('must_change_password')
                   ->default(true)
