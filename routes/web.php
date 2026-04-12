@@ -80,14 +80,20 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/admin/data-admin/{id}', [DataAdminController::class, 'destroy'])->name('DataAdmin.destroy');
 
     Route::get('/admin/produk', [ProdukController::class, 'index'])->name('produk.index');
+    Route::post('/admin/produk', [ProdukController::class, 'store'])->name('produk.store');
+    Route::put('/admin/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
+    Route::delete('/admin/produk/{id_produk}', [ProdukController::class, 'destroy'])->name('produk.destroy');
 
     Route::get('/admin/supplier', [SupplierController::class, 'index'])->name('supplier.index');
+    Route::post('/admin/supplier', [SupplierController::class, 'store'])->name('supplier.store');
+    Route::put('/admin/supplier/{id}', [SupplierController::class, 'update'])->name('supplier.update');
+    Route::delete('/admin/supplier/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
 
     Route::get('/admin/pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
 
     Route::get('/admin/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
 
-    Route::get('/admin/barang-masuk', [TransaksiController::class, 'masuk'])->name('barang_masuk.index');
+    Route::get('/admin/barang-masuk', [TransaksiController::class, 'barangmasuk'])->name('barang_masuk.index');
 
     Route::get('/admin/distribusi', [TransaksiController::class, 'distribusi'])->name('distribusi.index');
 

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class TransaksiController extends Controller
 {
-    public function masuk() {
+    public function barangmasuk() {
 
         if (Auth::user()->role !== 'admin') {
             abort(403, 'Akses Ditolak!');
