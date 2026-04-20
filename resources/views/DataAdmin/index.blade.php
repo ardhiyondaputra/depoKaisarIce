@@ -1,13 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    input::-ms-reveal,
+    input::-ms-clear {
+        display: none;
+    }
+
+    .input-group-text {
+        background-color: white;
+        border-left: none;
+    }
+    .form-control:focus + .input-group-text {
+        border-color: #86b7fe;
+    }
+</style>
+
 <div class="container-fluid py-4 px-3" style="background-color: #f8f9fc; min-height: 100vh;">
     <div class="row">
-    
         @include('layouts.sidebar')
 
         <div class="col-md-9 col-lg-10 ps-md-4">
-
             @include('layouts.topbar')
 
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
@@ -53,24 +66,16 @@
                                 <td class="text-center px-3">
                                     <div class="d-flex justify-content-center align-items-center gap-2">
                                         <button class="btn btn-sm btn-light rounded-pill px-3 border shadow-sm fw-bold" 
-                                                style="height: 32px; display: flex; align-items: center;"
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#modalEdit{{ $admin->id_user }}">
                                             Edit
                                         </button>
                                         
-                                        <form action="{{ route('DataAdmin.destroy', $admin->id_user) }}" 
-                                            method="POST" 
-                                            class="m-0" 
-                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus admin ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    class="btn btn-sm btn-outline-danger rounded-pill px-3 shadow-sm fw-bold"
-                                                    style="height: 32px; display: flex; align-items: center;">
-                                                <i class="bi bi-trash me-1"></i> Hapus
-                                            </button>
-                                        </form>
+                                        <button class="btn btn-sm btn-outline-danger rounded-pill px-3 shadow-sm fw-bold"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalHapus{{ $admin->id_user }}">
+                                            <i class="bi bi-trash me-1"></i> Hapus
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -99,25 +104,54 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label small fw-bold">Password Baru</label>
-                                                    <div class="position-relative d-flex align-items-center">
+                                                    <div class="input-group shadow-sm rounded-3">
                                                         <input type="password" 
-                                                            name="password" 
-                                                            id="pw{{ $admin->id_user }}" 
-                                                            class="form-control rounded-3 pe-5"
-                                                            placeholder="Kosongkan jika tidak ganti"
-                                                            autocomplete="new-password">
-                                                        <div class="position-absolute end-0 me-3" 
-                                                            style="cursor: pointer; z-index: 10;" 
-                                                            onclick="togglePro('pw{{ $admin->id_user }}', 'ic{{ $admin->id_user }}')">
+                                                               name="password" 
+                                                               id="pw{{ $admin->id_user }}" 
+                                                               class="form-control border-end-0"
+                                                               placeholder="Kosongkan jika tidak ganti"
+                                                               style="border-top-left-radius: 0.5rem; border-bottom-left-radius: 0.5rem;">
+                                                        <span class="input-group-text bg-white border-start-0" 
+                                                              style="cursor: pointer; border-top-right-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"
+                                                              onclick="togglePro('pw{{ $admin->id_user }}', 'ic{{ $admin->id_user }}')">
                                                             <i class="bi bi-eye text-muted" id="ic{{ $admin->id_user }}"></i>
-                                                        </div>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer border-0 p-4 pt-0">
-                                                <button type="submit" class="btn btn-dark w-100 rounded-pill py-2 shadow-sm fw-bold">Simpan Perubahan</button>
+                                                <button type="submit" class="btn btn-dark w-100 rounded-pill py-2 fw-bold">Simpan Perubahan</button>
                                             </div>
                                         </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="modalHapus{{ $admin->id_user }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+                                    <div class="modal-content border-0 shadow rounded-4">
+                                        <div class="modal-header border-0 p-4 pb-0">
+                                            <h5 class="fw-bold mb-0">Konfirmasi Hapus</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body text-center p-4">
+                                            <div class="mb-4">
+                                                <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                                    <i class="bi bi-trash3-fill text-danger" style="font-size: 2.5rem;"></i>
+                                                </div>
+                                            </div>
+                                            <p class="mb-0">Apakah kamu yakin ingin menghapus {{ $admin->username }}?</p>
+                                        </div>
+                                        <div class="modal-footer border-0 p-4 pt-0">
+                                            <div class="d-flex w-100 gap-2">
+                                                <button type="button" class="btn btn-light w-100 rounded-pill py-2 fw-bold border" data-bs-dismiss="modal">Batal</button>
+                                                <form action="{{ route('DataAdmin.destroy', $admin->id_user) }}" method="POST" class="w-100">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger w-100 rounded-pill py-2 fw-bold">Ya, Hapus</button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -146,24 +180,23 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-bold">Password</label>
-                        <div class="position-relative d-flex align-items-center">
+                        <div class="input-group shadow-sm rounded-3">
                             <input type="password" 
-                                name="password" 
-                                id="pwTambah" 
-                                class="form-control rounded-3 pe-5"
-                                placeholder="Masukkan password"
-                                required 
-                                autocomplete="new-password">
-                            <div class="position-absolute end-0 me-3" 
-                                style="cursor: pointer; z-index: 10;" 
-                                onclick="togglePro('pwTambah', 'icTambah')">
+                                   name="password" 
+                                   id="pwTambah" 
+                                   class="form-control border-end-0" 
+                                   placeholder="Masukkan password" 
+                                   required>
+                            <span class="input-group-text bg-white border-start-0" 
+                                  style="cursor: pointer;"
+                                  onclick="togglePro('pwTambah', 'icTambah')">
                                 <i class="bi bi-eye text-muted" id="icTambah"></i>
-                            </div>
+                            </span>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0">
-                    <button type="submit" class="btn btn-dark w-100 rounded-pill py-2 shadow-sm fw-bold">Tambah Sekarang</button>
+                    <button type="submit" class="btn btn-dark w-100 rounded-pill py-2 fw-bold">Tambah Sekarang</button>
                 </div>
             </form>
         </div>
@@ -186,21 +219,20 @@ function togglePro(inputId, iconId) {
 
 document.addEventListener('DOMContentLoaded', function() {
     const allModals = document.querySelectorAll('.modal');
-
     allModals.forEach(modal => {
         modal.addEventListener('hidden.bs.modal', function () {
             const form = modal.querySelector('form');
-            if (form) {
-                form.reset();
-                const passwordInputs = modal.querySelectorAll('input[name="password"]');
-                passwordInputs.forEach(input => {
-                    input.type = 'password';
-                });
-                const icons = modal.querySelectorAll('.bi-eye-slash');
-                icons.forEach(icon => {
-                    icon.classList.replace('bi-eye-slash', 'bi-eye');
-                });
-            }
+            if (form) form.reset();
+            
+            const passwordInputs = modal.querySelectorAll('input[type="text"]');
+            passwordInputs.forEach(input => {
+                if(input.name === 'password') input.type = 'password';
+            });
+            
+            const icons = modal.querySelectorAll('.bi-eye-slash');
+            icons.forEach(icon => {
+                icon.classList.replace('bi-eye-slash', 'bi-eye');
+            });
         });
     });
 });

@@ -44,27 +44,9 @@
                required>
     </div>
 
-
-    <div class="mb-3">
-        <label>Recovery Key (7 karakter bebas)</label>
-
-        <input type="text"
-               name="recovery_key"
-               class="form-control"
-               maxlength="7"
-               required>
-    </div>
-
-
     <button class="btn btn-dark w-100">
         Simpan
     </button>
-
-</form>
-
-        </div>
-
-    </div>
 
 </div>
 

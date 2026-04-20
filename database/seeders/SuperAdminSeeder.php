@@ -16,6 +16,7 @@ class SuperAdminSeeder extends Seeder
             'password' => Hash::make('superadmin123'),
             'role' => 'super admin',
             'status' => 'aktif',
+            'must_change_password' => 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

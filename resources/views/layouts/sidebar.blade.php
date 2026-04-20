@@ -39,13 +39,6 @@
         <a href="{{ route('distribusi.index') }}" class="nav-link {{ request()->routeIs('distribusi.index') ? 'active bg-dark text-white' : 'text-dark' }} mb-1 rounded-3">
             <i class="bi bi-send me-2"></i> Distribusi
         </a>
-        <small class="text-muted fw-bold text-uppercase mt-3 mb-2">Stok</small>
-        <a href="{{ route('info_stok.index') }}" class="nav-link {{ request()->routeIs('info_stok.index') ? 'active bg-dark text-white' : 'text-dark' }} mb-1 rounded-3">
-            <i class="bi bi-info-circle{{ request()->routeIs('info_stok.index') ? '-fill' : '' }} me-2"></i> Informasi Stok
-        </a>
-        <a href="{{ route('riwayat_stok.index') }}" class="nav-link {{ request()->routeIs('riwayat_stok.index') ? 'active bg-dark text-white' : 'text-dark' }} mb-1 rounded-3">
-            <i class="bi bi-clock-history me-2"></i> Riwayat Stok
-        </a>
         <small class="text-muted fw-bold text-uppercase mt-3 mb-2">Laporan</small>
         <a href="{{ route('laporan.index') }}" class="nav-link {{ request()->routeIs('laporan.index') ? 'active bg-dark text-white' : 'text-dark' }} mb-1 rounded-3">
             <i class="bi bi-file-earmark-bar-graph{{ request()->routeIs('laporan.index') ? '-fill' : '' }} me-2"></i> Laporan Operasional

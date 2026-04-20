@@ -8,21 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('user', function (Blueprint $table) {
-
-            $table->increments('id_user');
-
-            $table->string('username', 30)->unique();
-
-            $table->string('password', 60);
-
-            $table->enum('role', ['super admin', 'admin'])->nullable();
-
-            $table->enum('status', ['aktif', 'tidak aktif'])->nullable();
-
-            $table->timestamps();
-        });
-
         Schema::create('sessions', function (Blueprint $table) {
 
             $table->string('id')->primary();
@@ -41,8 +26,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('user');
-
         Schema::dropIfExists('sessions');
     }
 };

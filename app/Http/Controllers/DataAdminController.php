@@ -29,7 +29,7 @@ class DataAdminController extends Controller
 
         $request->validate([
             'username' => 'required|unique:user,username',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8',
         ]);
 
         User::create([
@@ -37,6 +37,7 @@ class DataAdminController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'admin',
             'status' => 'aktif',
+            'must_change_password' => 1,
         ]);
 
         return back()->with('success', 'Admin berhasil ditambahkan!');

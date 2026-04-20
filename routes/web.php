@@ -31,23 +31,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/recovery-password', function () {
-    return view('auth.recovery-password');
-})->name('password.recovery.form');
-
-
-Route::post('/recovery-password',
-    [App\Http\Controllers\Auth\RecoveryPasswordController::class, 'check']
-)->name('password.recovery.check');
-
-
-Route::post('/recovery-password/reset',
-    [App\Http\Controllers\Auth\RecoveryPasswordController::class, 'reset']
-)->name('password.recovery.reset');
-
-Route::get('/recovery-password/reset', function () {
-    return view('auth.recovery-reset-password');
-})->name('password.recovery.reset.form');
 /*
 |--------------------------------------------------------------------------
 | Dashboard setelah login
@@ -96,10 +79,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/barang-masuk', [TransaksiController::class, 'barangmasuk'])->name('barang_masuk.index');
 
     Route::get('/admin/distribusi', [TransaksiController::class, 'distribusi'])->name('distribusi.index');
-
-    Route::get('/admin/info-stok', [StokController::class, 'info'])->name('info_stok.index');
-
-    Route::get('/admin/riwayat-stok', [StokController::class, 'riwayat'])->name('riwayat_stok.index');
 
     Route::get('/admin/laporan', [LaporanController::class, 'index'])->name('laporan.index');
 });
