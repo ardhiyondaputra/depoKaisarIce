@@ -1,4 +1,12 @@
-<div class="col-md-3 col-lg-2 bg-white shadow-sm rounded-4 p-4 mb-4" style="border-right: 1px solid #e3e6f0;">
+<div class="col-md-3 col-lg-2 bg-white shadow-sm rounded-4 p-4 mb-4 position-fixed"
+     style="
+        border-right: 1px solid #e3e6f0;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 1000;
+     ">
     <div class="d-flex align-items-center mb-5 pb-3 border-bottom">
         <img src="{{ asset('images/LOGO DEPO KAISAR ICE.svg') }}" alt="Logo" style="max-height: 40px;">
         <span class="ms-2 fw-bold h5 mb-0" style="color: #000000;">Depo Kaisar Ice</span>

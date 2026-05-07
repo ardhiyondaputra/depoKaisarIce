@@ -1,11 +1,14 @@
 @extends('layouts.app')
 
+@section('title', 'Data Supplier')
+
 @section('content')
 <div class="container-fluid py-4 px-3" style="background-color: #f8f9fc; min-height: 100vh;">
     <div class="row">
         @include('layouts.sidebar')
 
-        <div class="col-md-9 col-lg-10 ps-md-4">
+        <div class="col-md-9 col-lg-10 ps-md-4"
+     style="margin-left: 16.666667%;">
             @include('layouts.topbar')
 
             {{-- @if(session('success'))
@@ -15,13 +18,16 @@
                 </div>
             @endif --}}
 
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mt-4">
-                <div class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold mb-0" style="font-size: 1.1rem;">Data Supplier</h5>
-                    <button class="btn btn-dark rounded-pill px-4 shadow-sm fw-bold" style="font-size: 0.85rem;" data-bs-toggle="modal" data-bs-target="#modalTambahSupplier">
-                        Tambah Supplier
-                    </button>
-                </div>
+            
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mt-4">
+                <div class="card-header bg-white border-0 p-4 d-flex justify-content-end align-items-center">
+    <button class="btn btn-dark rounded-pill px-4 shadow-sm fw-bold"
+            style="font-size: 0.85rem;"
+            data-bs-toggle="modal"
+            data-bs-target="#modalTambahSupplier">
+        Tambah Supplier
+    </button>
+</div>
                 
                 <div class="table-responsive px-4 pb-4">
                     <table class="table table-hover align-middle w-100">

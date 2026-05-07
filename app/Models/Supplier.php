@@ -8,9 +8,17 @@ class Supplier extends Model
 {
     protected $table = 'supplier';
     protected $primaryKey = 'id_supplier';
-    protected $fillable = ['nama_supplier', 'alamat', 'no_hp'];
+    public $incrementing = true;
 
-    // Relasi ke barang masuk untuk pengecekan hapus
+    protected $fillable = [
+        'nama_supplier',
+        'alamat',
+        'no_hp'
+    ];
+
+    public $timestamps = true;
+
+    // // Relasi (AKTIFKAN, ini penting nanti)
     // public function barangMasuk()
     // {
     //     return $this->hasMany(BarangMasuk::class, 'supplier_id_supplier', 'id_supplier');

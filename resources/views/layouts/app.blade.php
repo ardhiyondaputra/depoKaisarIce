@@ -19,11 +19,13 @@
     <!-- icon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
+
+@include('layouts.script')
+
 <body>
     <div id="app">
         @if(
         !Request::is('login') &&
-        !Request::is('register') &&
         !Request::is('recovery-password') &&
         !Request::is('recovery-password/reset') &&
         !Request::is('change-password')
@@ -48,12 +50,6 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ route('login') }}">
             Login
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('register') }}">
-            Register
         </a>
     </li>
 @else
@@ -98,5 +94,6 @@
         </main>
 
     </div>
+    
 </body>
 </html>

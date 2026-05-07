@@ -1,156 +1,326 @@
 @extends('layouts.app')
 
+@section('title', 'Barang Masuk')
+
 @section('content')
 <div class="container-fluid py-4 px-3" style="background-color: #f8f9fc; min-height: 100vh;">
     <div class="row">
+
+        {{-- SIDEBAR --}}
         @include('layouts.sidebar')
 
-        <div class="col-md-9 col-lg-10 ps-md-4">
+        <div class="col-md-9 col-lg-10 ps-md-4"
+     style="margin-left: 16.666667%;">
+
+            {{-- TOPBAR --}}
             @include('layouts.topbar')
 
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-                <div class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold mb-0">Riwayat Barang Masuk</h5>
+            {{-- ALERT --}}
+            @if(session('success'))
+            <div class="alert alert-success mt-3 rounded-3 shadow-sm">
+                {{ session('success') }}
+            </div>
+            @endif
 
-                    <button class="btn btn-dark rounded-pill px-4 shadow-sm"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalTambahBarangMasuk">
+            {{-- CARD --}}
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mt-4">
+                <div class="card-header bg-white border-0 p-4 d-flex justify-content-end align-items-center">
+    <button class="btn btn-dark rounded-pill px-4 shadow-sm fw-bold"
+            style="font-size: 0.85rem;"
+            data-bs-toggle="modal"
+            data-bs-target="#modalTambah">
+        Tambah Barang Masuk
+    </button>
+</div>
 
-                        <i class="bi bi-plus-lg me-1"></i> Input Barang Masuk
-                    </button>
-                </div>
-
+                {{-- TABLE --}}
                 <div class="table-responsive px-4 pb-4">
-                    <table class="table table-hover align-middle" id="tableBarangMasuk">
+
+                    <table class="table table-hover align-middle">
 
                         <thead class="table-light">
-                            <tr>
+                            <tr class="text-muted">
+
                                 <th>Tanggal</th>
-                                <th>Nama Produk</th>
-                                <th>Jumlah Masuk</th>
+                                <th>Jenis Es</th>
+                                <th>Jumlah</th>
+                                <th>Harga Satuan</th>
+                                <th>Total Harga</th>
                                 <th>Supplier</th>
                                 <th>Petugas</th>
+                                <th>Input Oleh</th>
+                                <th>Aksi</th>
+
                             </tr>
                         </thead>
 
-                        <tbody id="tbodyBarangMasuk">
+                        <tbody>
 
-                            <tr id="emptyRow">
-                                <td colspan="5" class="text-center py-5 text-muted">
-                                    <i class="bi bi-info-circle me-1"></i>
-                                    Belum ada transaksi barang masuk.
+                            @forelse($data as $d)
+
+                                @foreach($d->detail as $detail)
+
+                                <tr>
+
+                                    {{-- TANGGAL --}}
+                                    <td>
+                                        {{ $d->tanggal_masuk }}
+                                    </td>
+
+                                    {{-- PRODUK --}}
+                                    <td>
+                                        {{ $detail->produk->jenis_es }}
+
+                                        <br>
+
+                                        <small class="text-muted">
+                                            {{ $detail->produk->ukuran_pack }}
+                                        </small>
+                                    </td>
+
+                                    {{-- JUMLAH --}}
+                                    <td>
+                                        {{ $detail->jumlah }}
+                                    </td>
+
+                                    {{-- HARGA SATUAN --}}
+                                    <td>
+                                        Rp {{ number_format($detail->harga_beli / $detail->jumlah, 0, ',', '.') }}
+                                    </td>
+
+                                    {{-- TOTAL HARGA --}}
+                                    <td class="fw-semibold">
+                                        Rp {{ number_format($detail->harga_beli, 0, ',', '.') }}
+                                    </td>
+
+                                    {{-- SUPPLIER --}}
+                                    <td>
+                                        {{ $d->supplier->nama_supplier }}
+                                    </td>
+
+                                    {{-- PETUGAS --}}
+                                    <td>
+                                        {{ $d->karyawan->nama_karyawan }}
+                                    </td>
+
+                                    {{-- INPUT OLEH --}}
+                                    <td>
+                                        <span class="badge bg-dark">
+                                            {{ $d->user->username }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+
+    <form action="{{ route('barang_masuk.destroy', $d->id_barang_masuk) }}"
+          method="POST"
+          onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+
+        @csrf
+        @method('DELETE')
+
+        <button type="submit"
+                                                class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold"
+                                                style="font-size: 0.8rem;">
+                                                Hapus
+                                            </button>
+
+    </form>
+
+</td>
+
+                                </tr>
+
+                                @endforeach
+
+                            @empty
+
+                            <tr>
+                                <td colspan="9"
+                                    class="text-center py-5 text-muted">
+
+                                    Belum ada data barang masuk
+
                                 </td>
                             </tr>
+
+                            @endforelse
 
                         </tbody>
 
                     </table>
+
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 
+{{-- ================= MODAL TAMBAH ================= --}}
+<div class="modal fade" id="modalTambah" tabindex="-1">
 
-<!-- MODAL -->
-<div class="modal fade" id="modalTambahBarangMasuk">
     <div class="modal-dialog modal-dialog-centered">
+
         <div class="modal-content rounded-4 border-0 shadow">
 
-            <form id="formBarangMasuk">
+            <form action="{{ route('barang_masuk.store') }}"
+                  method="POST">
 
+                @csrf
+
+                {{-- HEADER --}}
                 <div class="modal-header border-0 p-4">
-                    <h5 class="fw-bold">Input Barang Masuk</h5>
+
+                    <h5 class="fw-bold mb-0">
+                        Tambah Barang Masuk
+                    </h5>
 
                     <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"></button>
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+
                 </div>
 
+                {{-- BODY --}}
                 <div class="modal-body p-4 pt-0">
 
-                    <!-- PRODUK -->
+                    {{-- PRODUK --}}
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">
-                            Pilih Produk
+
+                        <label class="form-label fw-semibold small text-muted">
+                            PRODUK
                         </label>
 
-                        <select id="produk"
-                            class="form-select rounded-3"
-                            required>
+                        <select name="produk_id_produk"
+                                class="form-select rounded-3 bg-light border-0 py-2"
+                                required>
 
                             <option disabled selected>
-                                Pilih Es Batu...
+                                Pilih Produk
                             </option>
 
-                            <option>Es Kristal 5kg</option>
-                            <option>Es Tube 10kg</option>
-                            <option>Es Balok 25kg</option>
+                            @foreach($produk as $p)
+
+                            <option value="{{ $p->id_produk }}">
+                                {{ $p->jenis_es }} - {{ $p->ukuran_pack }}
+                            </option>
+
+                            @endforeach
 
                         </select>
+
                     </div>
 
-
-                    <!-- SUPPLIER -->
+                    {{-- SUPPLIER --}}
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">
-                            Supplier
+
+                        <label class="form-label fw-semibold small text-muted">
+                            SUPPLIER
                         </label>
 
-                        <select id="supplier"
-                            class="form-select rounded-3"
-                            required>
+                        <select name="supplier_id_supplier"
+                                class="form-select rounded-3 bg-light border-0 py-2"
+                                required>
 
                             <option disabled selected>
-                                Pilih Supplier...
+                                Pilih Supplier
                             </option>
 
-                            <option>CV Sumber Ice</option>
-                            <option>PT Es Makmur</option>
+                            @foreach($supplier as $s)
+
+                            <option value="{{ $s->id_supplier }}">
+                                {{ $s->nama_supplier }}
+                            </option>
+
+                            @endforeach
 
                         </select>
+
                     </div>
 
+                    {{-- PETUGAS --}}
+                    <div class="mb-3">
 
-                    <!-- JUMLAH + TANGGAL -->
-                    <div class="row">
+                        <label class="form-label fw-semibold small text-muted">
+                            PETUGAS
+                        </label>
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label small fw-bold">
-                                Jumlah Masuk
-                            </label>
-
-                            <input type="number"
-                                id="jumlah"
-                                class="form-control rounded-3"
-                                placeholder="0"
+                        <select name="karyawan_id_karyawan"
+                                class="form-select rounded-3 bg-light border-0 py-2"
                                 required>
-                        </div>
 
+                            <option disabled selected>
+                                Pilih Petugas
+                            </option>
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label small fw-bold">
-                                Tanggal
-                            </label>
+                            @foreach($karyawan as $k)
 
-                            <input type="date"
-                                id="tanggal"
-                                class="form-control rounded-3"
-                                value="{{ date('Y-m-d') }}"
-                                required>
-                        </div>
+                            <option value="{{ $k->id_karyawan }}">
+                                {{ $k->nama_karyawan }}
+                            </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                    {{-- JUMLAH --}}
+                    <div class="mb-3">
+
+                        <label class="form-label fw-semibold small text-muted">
+                            JUMLAH
+                        </label>
+
+                        <input type="number"
+                               name="jumlah"
+                               class="form-control rounded-3 bg-light border-0 py-2"
+                               placeholder="Masukkan jumlah"
+                               required>
+
+                    </div>
+
+                    {{-- TOTAL HARGA BELI --}}
+                    <div class="mb-3">
+
+                        <label class="form-label fw-semibold small text-muted">
+                            TOTAL HARGA BELI
+                        </label>
+
+                        <input type="number"
+                               name="harga_beli"
+                               class="form-control rounded-3 bg-light border-0 py-2"
+                               placeholder="Masukkan total harga beli"
+                               required>
+
+                    </div>
+
+                    {{-- TANGGAL --}}
+                    <div class="mb-3">
+
+                        <label class="form-label fw-semibold small text-muted">
+                            TANGGAL
+                        </label>
+
+                        <input type="date"
+                               name="tanggal"
+                               class="form-control rounded-3 bg-light border-0 py-2"
+                               value="{{ date('Y-m-d') }}"
+                               required>
 
                     </div>
 
                 </div>
 
-
+                {{-- FOOTER --}}
                 <div class="modal-footer border-0 p-4 pt-0">
 
                     <button type="submit"
-                        class="btn btn-dark w-100 rounded-pill py-2 shadow-sm fw-bold">
+                            class="btn btn-dark w-100 rounded-pill py-2 fw-semibold shadow-sm">
 
-                        Simpan Transaksi
+                        Simpan Data
 
                     </button>
 
@@ -161,50 +331,5 @@
         </div>
     </div>
 </div>
-
-
-<script>
-
-document
-.getElementById("formBarangMasuk")
-.addEventListener("submit", function(e){
-
-    e.preventDefault();
-
-    let produk = document.getElementById("produk").value;
-    let supplier = document.getElementById("supplier").value;
-    let jumlah = document.getElementById("jumlah").value;
-    let tanggal = document.getElementById("tanggal").value;
-
-    let tbody = document.getElementById("tbodyBarangMasuk");
-
-    let emptyRow = document.getElementById("emptyRow");
-
-    if(emptyRow){
-        emptyRow.remove();
-    }
-
-    let row = `
-        <tr>
-            <td>${tanggal}</td>
-            <td>${produk}</td>
-            <td>${jumlah}</td>
-            <td>${supplier}</td>
-            <td>Admin</td>
-        </tr>
-    `;
-
-    tbody.insertAdjacentHTML("beforeend", row);
-
-    document.getElementById("formBarangMasuk").reset();
-
-    let modal = bootstrap.Modal
-        .getInstance(document.getElementById("modalTambahBarangMasuk"));
-
-    modal.hide();
-
-});
-
-</script>
 
 @endsection

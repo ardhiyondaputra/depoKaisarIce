@@ -69,6 +69,7 @@
                     </div>
 
                     {{-- BUTTON --}}
+                    
                     <button type="submit"
                             class="btn btn-dark w-100 rounded-pill py-2 fw-bold">
                         Login
@@ -93,4 +94,70 @@ function togglePassword() {
     }
 }
 </script>
+@if ($errors->has('username') || $errors->has('password'))
+<div id="errorPopup" class="popup-overlay">
+    <div class="popup-box">
+        <h5>Peringatan</h5>
+        <p>Username atau password salah.</p>
+        <button onclick="closePopup()">OK</button>
+    </div>
+</div>
+
+<!-- POP UP ERROR -->
+<style>
+.popup-overlay{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.4);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.popup-box{
+    background:#fff;
+    padding:25px 35px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    max-width:320px;
+    width:90%;
+}
+
+.popup-box h5{
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.popup-box p{
+    margin-bottom:20px;
+    color:#555;
+}
+
+.popup-box button{
+    background:#212529;
+    color:white;
+    border:none;
+    padding:8px 25px;
+    border-radius:999px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.popup-box button:hover{
+    opacity:0.9;
+}
+</style>
+
+<script>
+function closePopup(){
+    document.getElementById('errorPopup').style.display='none';
+}
+</script>
+@endif
+
 @endsection

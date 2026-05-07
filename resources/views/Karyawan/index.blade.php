@@ -1,201 +1,202 @@
 @extends('layouts.app')
 
+@section('title', 'Data Karyawan')
+
 @section('content')
 <div class="container-fluid py-4 px-3" style="background-color: #f8f9fc; min-height: 100vh;">
     <div class="row">
         @include('layouts.sidebar')
 
-        <div class="col-md-9 col-lg-10 ps-md-4">
+        <div class="col-md-9 col-lg-10 ps-md-4"
+     style="margin-left: 16.666667%;">
             @include('layouts.topbar')
 
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+            @if(session('success'))
+<div class="alert alert-success mt-3 rounded-3 shadow-sm">
 
-                <div class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold mb-0">Data Karyawan Pengiriman</h5>
+    {{ session('success') }}
 
-                    <button class="btn btn-dark rounded-pill px-4 shadow-sm"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalTambahKaryawan">
+</div>
+@endif
 
-                        <i class="bi bi-plus-lg me-1"></i>
-                        Tambah Karyawan
-
-                    </button>
-                </div>
-
-
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mt-4">
+                <div class="card-header bg-white border-0 p-4 d-flex justify-content-end align-items-center">
+    <button class="btn btn-dark rounded-pill px-4 shadow-sm fw-bold"
+            style="font-size: 0.85rem;"
+            data-bs-toggle="modal"
+            data-bs-target="#modalTambahKaryawan">
+        Tambah Karyawan
+    </button>
+</div>
+                
                 <div class="table-responsive px-4 pb-4">
-                    <table class="table table-hover align-middle">
-
+                    <table class="table table-hover align-middle w-100">
                         <thead class="table-light">
-                            <tr>
-                                <th>Nama</th>
-                                <th>Alamat</th>
-                                <th>No HP</th>
-                                <th class="text-end">Aksi</th>
+                            <tr class="text-muted fs-6 fw-bold">
+                                <th class="border-0 px-3 py-3 rounded-start" style="width: 35%;">Nama</th>
+                                <th class="border-0 py-3" style="width: 30%;">Alamat</th>
+                                <th class="border-0 py-3 text-center" style="width: 15%;">No HP</th>
+                                <th class="border-0 text-center py-3 rounded-end" style="width: 20%;">Aksi</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            @forelse($karyawan as $k)
+                            <tr class="border-top">
+                                <td class="py-3 border-0 px-3">
+                                    <div class="text-dark fw-normal" style="font-size: 0.9rem;">
+                                        {{ $k->nama_karyawan }}
+                                    </div>
+                                </td>
+                                <td class="border-0">
+                                    <div class="text-muted small text-start">
+                                        {{ $k->alamat }}
+                                    </div>
+                                </td>
+                                <td class="border-0 text-center">
+                                    <span class="text-dark" style="font-size: 0.85rem;">
+                                        {{ $k->no_hp }}
+                                    </span>
+                                </td>
+                                <td class="text-center border-0">
+                                    <div class="d-flex justify-content-center gap-2">
 
+                                        <!-- EDIT -->
+                                        <button class="btn btn-light btn-sm rounded-pill px-3 fw-bold border shadow-sm"
+                                                style="font-size: 0.8rem;"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modalEdit{{ $k->id_karyawan }}">
+                                            Edit
+                                        </button>
 
-                        <tbody id="tbodyKaryawan">
+                                        <!-- DELETE -->
+                                        <form action="{{ route('karyawan.destroy', $k->id_karyawan) }}"
+                                              method="POST"
+                                              class="d-inline"
+                                              onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                    class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold"
+                                                    style="font-size: 0.8rem;">
+                                                Hapus
+                                            </button>
+                                        </form>
 
-                            <tr id="emptyRow">
-                                <td colspan="4"
-                                    class="text-center py-5 text-muted">
-
-                                    <i class="bi bi-info-circle me-1"></i>
-                                    Belum ada data karyawan.
-
+                                    </div>
                                 </td>
                             </tr>
 
-                        </tbody>
+                            <!-- MODAL EDIT -->
+                            <div class="modal fade" id="modalEdit{{ $k->id_karyawan }}" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content rounded-4 border-0 shadow">
+                                        <form action="{{ route('karyawan.update', $k->id_karyawan) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
 
+                                            <div class="modal-header border-0 p-4">
+                                                <h5 class="fw-bold">Edit Data Karyawan</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <div class="modal-body p-4 pt-0">
+
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-bold text-muted">NAMA</label>
+                                                    <input type="text" name="nama_karyawan"
+                                                           class="form-control bg-light border-0 rounded-3 py-2"
+                                                           value="{{ $k->nama_karyawan }}" required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-bold text-muted">ALAMAT</label>
+                                                    <textarea name="alamat"
+                                                              class="form-control bg-light border-0 rounded-3 py-2"
+                                                              rows="3" required>{{ $k->alamat }}</textarea>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-bold text-muted">NO HP</label>
+                                                    <input type="text" name="no_hp"
+                                                           class="form-control bg-light border-0 rounded-3 py-2 fw-bold text-dark"
+                                                           value="{{ $k->no_hp }}" required>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="modal-footer border-0 p-4 pt-0">
+                                                <button type="submit"
+                                                        class="btn btn-dark w-100 rounded-pill py-2 fw-bold shadow">
+                                                    Simpan Perubahan
+                                                </button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted small">
+                                    Belum ada data karyawan tersedia.
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
 
-
-<!-- MODAL TAMBAH KARYAWAN -->
-<div class="modal fade" id="modalTambahKaryawan">
-
+<!-- MODAL TAMBAH -->
+<div class="modal fade" id="modalTambahKaryawan" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
-
-            <form id="formTambahKaryawan">
+            <form action="{{ route('karyawan.store') }}" method="POST">
+                @csrf
 
                 <div class="modal-header border-0 p-4">
                     <h5 class="fw-bold">Tambah Karyawan Baru</h5>
-
-                    <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
 
                 <div class="modal-body p-4 pt-0">
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">
-                            Nama Lengkap
-                        </label>
-
-                        <input type="text"
-                            id="nama"
-                            class="form-control rounded-3"
-                            placeholder="Masukkan nama karyawan"
-                            required>
+                        <label class="form-label small fw-bold text-muted">NAMA</label>
+                        <input type="text" name="nama_karyawan"
+                               class="form-control bg-light border-0 rounded-3 py-2"
+                               placeholder="Nama karyawan" required>
                     </div>
 
-
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">
-                            Alamat
-                        </label>
-
-                        <input type="text"
-                            id="alamat"
-                            class="form-control rounded-3"
-                            placeholder="Masukkan alamat"
-                            required>
+                        <label class="form-label small fw-bold text-muted">ALAMAT</label>
+                        <textarea name="alamat"
+                                  class="form-control bg-light border-0 rounded-3 py-2"
+                                  rows="3" placeholder="Alamat Karyawan" required></textarea>
                     </div>
 
-
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">
-                            Nomor HP
-                        </label>
-
-                        <input type="text"
-                            id="nohp"
-                            class="form-control rounded-3"
-                            placeholder="Contoh: 08123456789"
-                            required>
+                        <label class="form-label small fw-bold text-muted">NO HP</label>
+                        <input type="text" name="no_hp"
+                               class="form-control bg-light border-0 rounded-3 py-2"
+                               placeholder="08123456789" required>
                     </div>
 
                 </div>
 
-
                 <div class="modal-footer border-0 p-4 pt-0">
-
                     <button type="submit"
-                        class="btn btn-dark w-100 rounded-pill py-2 shadow-sm fw-bold">
-
-                        Simpan Data Karyawan
-
+                            class="btn btn-dark w-100 rounded-pill py-2 fw-bold shadow">
+                        Simpan Karyawan
                     </button>
-
                 </div>
 
             </form>
-
         </div>
     </div>
-
 </div>
-
-
-<script>
-
-document
-.getElementById("formTambahKaryawan")
-.addEventListener("submit", function(e){
-
-    e.preventDefault();
-
-    let nama = document.getElementById("nama").value;
-    let alamat = document.getElementById("alamat").value;
-    let nohp = document.getElementById("nohp").value;
-
-    let tbody = document.getElementById("tbodyKaryawan");
-
-    let emptyRow = document.getElementById("emptyRow");
-
-    if(emptyRow){
-        emptyRow.remove();
-    }
-
-    let row = `
-        <tr>
-            <td>${nama}</td>
-            <td>${alamat}</td>
-            <td>${nohp}</td>
-            <td class="text-end">
-                <button class="btn btn-sm btn-danger"
-                    onclick="hapusRow(this)">
-                    Hapus
-                </button>
-            </td>
-        </tr>
-    `;
-
-    tbody.insertAdjacentHTML("beforeend", row);
-
-    document.getElementById("formTambahKaryawan").reset();
-
-    let modal = bootstrap.Modal
-        .getInstance(document.getElementById("modalTambahKaryawan"));
-
-    modal.hide();
-
-});
-
-
-function hapusRow(btn){
-
-    if(confirm("Yakin hapus data karyawan?")){
-
-        btn.closest("tr").remove();
-
-    }
-
-}
-
-</script>
-
 @endsection

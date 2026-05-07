@@ -1,25 +1,41 @@
 @extends('layouts.app')
 
+@section('title', 'Pengaturan Profil')
+
+@section('subtitle', 'Kelola informasi akun Anda')
+
 @section('content')
 <div class="container-fluid py-4 px-3" style="background-color: #f8f9fc; min-height: 100vh;">
     <div class="row">
         @include('layouts.sidebar')
 
-        <div class="col-md-9 col-lg-10 ps-md-4">
+        <div class="col-md-9 col-lg-10 ps-md-4"
+     style="margin-left: 16.666667%;">
             @include('layouts.topbar')
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <span class="badge rounded-pill bg-dark px-3 py-2">
+
+        <i class="bi bi-shield-check me-1"></i>
+
+        {{ strtoupper(Auth::user()->role) }}
+
+    </span>
+
+</div>
+
+            @if(session('success'))
+<div class="alert alert-success mt-3 rounded-3 shadow-sm">
+
+    {{ session('success') }}
+
+</div>
+@endif
 
             <div class="row">
                 <div class="col-md-7 col-lg-6">
                     <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-                        <div class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="fw-bold mb-0">Pengaturan Profil</h5>
-                                <p class="text-muted small mb-0 mt-1">Kelola informasi akun Anda sebagai <strong>{{ ucfirst(Auth::user()->role) }}</strong></p>
-                            </div>
-                            <span class="badge rounded-pill bg-dark px-3 py-2">
-                                <i class="bi bi-shield-check me-1"></i> {{ strtoupper(Auth::user()->role) }}
-                            </span>
-                        </div>
                         
                         <div class="card-body p-4 pt-0">
                             <form action="{{ route('profil.update') }}" method="POST">

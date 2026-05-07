@@ -12,6 +12,7 @@ class SuperAdminSeeder extends Seeder
     public function run(): void
     {
         DB::table('user')->insert([
+            'id_user' => 1,
             'username' => 'superadmin',
             'password' => Hash::make('superadmin123'),
             'role' => 'super admin',

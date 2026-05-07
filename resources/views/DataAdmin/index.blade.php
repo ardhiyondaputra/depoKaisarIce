@@ -20,7 +20,8 @@
     <div class="row">
         @include('layouts.sidebar')
 
-        <div class="col-md-9 col-lg-10 ps-md-4">
+        <div class="col-md-9 col-lg-10 ps-md-4"
+     style="margin-left: 16.666667%;">
             @include('layouts.topbar')
 
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">

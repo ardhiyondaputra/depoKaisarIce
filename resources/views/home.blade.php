@@ -1,52 +1,303 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid py-4 px-3" style="background-color: #f8f9fc; min-height: 100vh;">
+
+<div class="container-fluid py-4 px-3"
+     style="background-color: #f8f9fc; min-height: 100vh;">
+
     <div class="row">
 
+        {{-- SIDEBAR --}}
         @include('layouts.sidebar')
 
-        <div class="col-md-9 col-lg-10 ps-md-4">
+        <div class="col-md-9 col-lg-10 ps-md-4"
+     style="margin-left: 16.666667%;">
 
+            {{-- TOPBAR --}}
             @include('layouts.topbar')
 
-            <div class="row g-4 mb-4 text-center">
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
-                        <div class="text-muted small mb-3 fw-bold text-uppercase"><i class="bi bi-box-seam me-1"></i> Data Produk</div>
-                        <h1 class="fw-bold m-0" style="color: #1e3a5f;">{{ $total_produk ?? 0 }}</h1>
+            {{-- ================= CARD ================= --}}
+            <div class="row g-4 mb-4">
+
+                {{-- STOK --}}
+                <div class="col-md-3">
+
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+
+                        <div class="text-muted small fw-bold text-uppercase mb-3">
+
+                            Total Stok
+
+                        </div>
+
+                        <h2 class="fw-bold text-primary m-0">
+
+                            {{ $totalStok }}
+
+                        </h2>
+
+                        <small class="text-muted">
+                            Total stok es tersedia
+                        </small>
+
                     </div>
+
                 </div>
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
-                        <div class="text-muted small mb-3 fw-bold text-uppercase"><i class="bi bi-truck me-1"></i> Data Supplier</div>
-                        <h1 class="fw-bold m-0" style="color: #1e3a5f;">{{ $total_supplier ?? 0 }}</h1>
+
+                {{-- BARANG MASUK --}}
+                <div class="col-md-3">
+
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+
+                        <div class="text-muted small fw-bold text-uppercase mb-3">
+
+                            Barang Masuk Hari Ini
+
+                        </div>
+
+                        <h2 class="fw-bold text-success m-0">
+
+                            {{ $barangMasukHariIni }}
+
+                        </h2>
+
+                        <small class="text-muted">
+                            Transaksi barang masuk
+                        </small>
+
                     </div>
+
                 </div>
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
-                        <div class="text-muted small mb-3 fw-bold text-uppercase"><i class="bi bi-people me-1"></i> Data Pelanggan</div>
-                        <h1 class="fw-bold m-0" style="color: #1e3a5f;">{{ $total_pelanggan ?? 0 }}</h1>
+
+                {{-- DISTRIBUSI --}}
+                <div class="col-md-3">
+
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+
+                        <div class="text-muted small fw-bold text-uppercase mb-3">
+
+                            Distribusi Hari Ini
+
+                        </div>
+
+                        <h2 class="fw-bold text-danger m-0">
+
+                            {{ $distribusiHariIni }}
+
+                        </h2>
+
+                        <small class="text-muted">
+                            Distribusi hari ini
+                        </small>
+
                     </div>
+
                 </div>
+
+                {{-- PENDING --}}
+                <div class="col-md-3">
+
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+
+                        <div class="text-muted small fw-bold text-uppercase mb-3">
+
+                            Distribusi Pending
+
+                        </div>
+
+                        <h2 class="fw-bold text-warning m-0">
+
+                            {{ $distribusiPending }}
+
+                        </h2>
+
+                        <small class="text-muted">
+                            Menunggu pengiriman
+                        </small>
+
+                    </div>
+
+                </div>
+
             </div>
 
+            {{-- ================= GRAFIK ================= --}}
             <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
-                <h5 class="fw-bold mb-4">Grafik Aktivitas Sistem</h5>
-                <canvas id="myChart" style="max-height: 350px;"></canvas>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <h5 class="fw-bold mb-0">
+                        Grafik Operasional 7 Hari Terakhir
+                    </h5>
+
+                </div>
+
+                <canvas id="chartAktivitas"
+                        style="max-height: 350px;"></canvas>
+
             </div>
+
+            {{-- ================= DISTRIBUSI TERBARU ================= --}}
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <h5 class="fw-bold mb-0">
+                        Distribusi Terbaru
+                    </h5>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>No Transaksi</th>
+                                <th>Pelanggan</th>
+                                <th>Kurir</th>
+                                <th>Total Produk</th>
+                                <th>Tanggal</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @forelse($distribusiTerbaru as $d)
+
+                            <tr>
+
+                                <td>
+
+                                    #TRX-{{ $d->id_distribusi }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $d->pelanggan->nama_pelanggan }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $d->karyawan->nama_karyawan }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $d->detail->count() }} Produk
+
+                                </td>
+
+                                <td>
+
+                                    {{ $d->tanggal_keluar }}
+
+                                </td>
+
+                            </tr>
+
+                            @empty
+
+                            <tr>
+
+                                <td colspan="5"
+                                    class="text-center py-5 text-muted">
+
+                                    Belum ada distribusi
+
+                                </td>
+
+                            </tr>
+
+                            @endforelse
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
+
 </div>
 
+{{-- ================= CHART JS ================= --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx = document.getElementById('chartAktivitas');
+
+new Chart(ctx, {
+
+    type: 'line',
+
+    data: {
+
+        labels: {!! json_encode($tanggal) !!},
+
+        datasets: [
+
+            {
+                label: 'Barang Masuk',
+                data: {!! json_encode($dataMasuk) !!},
+                borderColor: 'green',
+                backgroundColor: 'rgba(0,128,0,0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true
+            },
+
+            {
+                label: 'Distribusi',
+                data: {!! json_encode($dataKeluar) !!},
+                borderColor: 'red',
+                backgroundColor: 'rgba(255,0,0,0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true
+            }
+
+        ]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+                position: 'top'
+            }
+
+        }
+
+    }
+
+});
+
 </script>
 
 <style>
-    .rounded-4 { border-radius: 1.25rem !important; }
-    .nav-link { font-weight: 500; transition: 0.2s; }
-    .nav-link:hover:not(.active) { background-color: #f1f3f5; }
-    .bg-success-subtle { background-color: #d1e7dd; }
-    .dropdown-item:active { background-color: #f8d7da; color: #dc3545; }
+
+.rounded-4 {
+    border-radius: 1.25rem !important;
+}
+
 </style>
+
 @endsection
