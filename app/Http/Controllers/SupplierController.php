@@ -43,17 +43,17 @@ class SupplierController extends Controller
     ]);
 
     return redirect()->back()->with('success', 'Data supplier berhasil diperbarui!');
-}
-
-    public function destroy($id) {
-    $supplier = Supplier::findOrFail($id);
-
-    if ($supplier->barangMasuk()->exists()) {
-        return redirect()->back()->with('error', 'Supplier tidak dapat dihapus karena sudah memiliki transaksi barang masuk!');
     }
 
-    $supplier->delete();
+        public function destroy($id) {
+        $supplier = Supplier::findOrFail($id);
 
-    return redirect()->back()->with('success', 'Supplier berhasil dihapus!');
-}
+        if ($supplier->barangMasuk()->exists()) {
+            return redirect()->back()->with('error', 'Supplier tidak dapat dihapus karena sudah memiliki transaksi barang masuk!');
+        }
+
+        $supplier->delete();
+
+        return redirect()->back()->with('success', 'Supplier berhasil dihapus!');
+    }
 }

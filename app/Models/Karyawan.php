@@ -14,4 +14,16 @@ class Karyawan extends Model
         'alamat',
         'no_hp'
     ];
+
+    // Relasi ke tabel Barang Masuk
+    public function barangMasuk()
+    {
+        return $this->hasMany(BarangMasuk::class, 'karyawan_id_karyawan', 'id_karyawan');
+    }
+
+    // Relasi ke tabel Distribusi
+    public function distribusi()
+    {
+        return $this->hasMany(Distribusi::class, 'karyawan_id_karyawan', 'id_karyawan');
+    }
 }

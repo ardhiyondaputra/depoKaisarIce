@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
 use App\Models\BarangMasuk;
 use App\Models\DetailBarangMasuk;
 use App\Models\Produk;
@@ -24,7 +23,7 @@ class BarangMasukController extends Controller
             'supplier',
             'karyawan',
             'user'
-        ])->get();
+        ])->orderBy('tanggal_masuk', 'desc')->get();
 
         $produk = Produk::all();
         $supplier = Supplier::all();
@@ -46,13 +45,14 @@ class BarangMasukController extends Controller
     // =========================
     public function storeBarangMasuk(Request $request)
     {
+        // Ubah validasi harga_beli menjadi harga_satuan
         $request->validate([
             'produk_id_produk' => 'required',
             'supplier_id_supplier' => 'required',
             'karyawan_id_karyawan' => 'required',
             'jumlah' => 'required|numeric',
-            'harga_beli' => 'required|numeric',
-            'tanggal' => 'required|date',
+            'harga_satuan' => 'required|numeric',
+            'tanggal' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -67,13 +67,21 @@ class BarangMasukController extends Controller
                 'user_id_user' => Auth::user()->id_user
             ]);
 
+            // KALKULASI TOTAL HARGA (Harga Satuan x Jumlah)
+            $total_harga_beli = $request->harga_satuan * $request->jumlah;
+
             // DETAIL
             DetailBarangMasuk::create([
                 'barang_masuk_id_barang_masuk' => $barangMasuk->id_barang_masuk,
                 'produk_id_produk' => $request->produk_id_produk,
                 'jumlah' => $request->jumlah,
-                'harga_beli' => $request->harga_beli
+                'harga_beli' => $total_harga_beli // Menyimpan total keseluruhan
             ]);
+
+            // LOGIKA TAMBAH STOK
+            $produk = Produk::findOrFail($request->produk_id_produk);
+            $produk->stok_produk += $request->jumlah;
+            $produk->save();
 
             DB::commit();
 
@@ -86,44 +94,16 @@ class BarangMasukController extends Controller
 
             DB::rollBack();
 
-            dd($e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi Kesalahan: ' . $e->getMessage());
 
         }
     }
 
     // =========================
-    // HAPUS BARANG MASUK
+    // HAPUS BARANG MASUK (DIBLOKIR)
     // =========================
-    public function destroy($id)
-    {
-        DB::beginTransaction();
-
-        try {
-
-            $barangMasuk = BarangMasuk::findOrFail($id);
-
-            // hapus detail terlebih dahulu
-            DetailBarangMasuk::where(
-                'barang_masuk_id_barang_masuk',
-                $id
-            )->delete();
-
-            // hapus header
-            $barangMasuk->delete();
-
-            DB::commit();
-
-            return redirect()->back()->with(
-                'success',
-                'Data barang masuk berhasil dihapus!'
-            );
-
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            dd($e->getMessage());
-
-        }
-    }
+    // public function destroy($id)
+    // {
+    //     return redirect()->back()->with('error', 'Data barang masuk bersifat permanen dan tidak dapat dihapus!');
+    // }
 }

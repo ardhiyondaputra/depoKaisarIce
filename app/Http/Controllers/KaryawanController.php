@@ -44,6 +44,11 @@ class KaryawanController extends Controller
     public function destroy($id)
     {
         $data = Karyawan::findOrFail($id);
+        
+        if ($data->barangMasuk()->exists() || $data->distribusi()->exists()) {
+            return redirect()->back()->with('error', 'Karyawan tidak dapat dihapus karena sudah memiliki riwayat tugas transaksi (Barang Masuk / Distribusi)!');
+        }
+
         $data->delete();
 
         return back()->with('success', 'Data berhasil dihapus');

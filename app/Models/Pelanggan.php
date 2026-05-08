@@ -17,4 +17,9 @@ class Pelanggan extends Model
         'alamat',
         'no_hp'
     ];
+
+    public function distribusi()
+    {
+        return $this->hasMany(Distribusi::class, 'pelanggan_id_pelanggan', 'id_pelanggan');
+    }
 }

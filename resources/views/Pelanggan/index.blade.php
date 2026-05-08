@@ -7,27 +7,34 @@
     <div class="row">
         @include('layouts.sidebar')
 
-        <div class="col-md-9 col-lg-10 ps-md-4"
-     style="margin-left: 16.666667%;">
+        <div class="col-md-9 col-lg-10 ps-md-4" style="margin-left: 16.666667%;">
             @include('layouts.topbar')
 
+            {{-- Alert untuk pesan Sukses --}}
             @if(session('success'))
-<div class="alert alert-success mt-3 rounded-3 shadow-sm">
+                <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm mt-4" role="alert">
+                    <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
-    {{ session('success') }}
-
-</div>
-@endif
+            {{-- Alert untuk pesan Error / Gagal --}}
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm mt-4" role="alert">
+                    <i class="bi bi-exclamation-circle me-2"></i> {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mt-4">
                 <div class="card-header bg-white border-0 p-4 d-flex justify-content-end align-items-center">
-    <button class="btn btn-dark rounded-pill px-4 shadow-sm fw-bold"
-            style="font-size: 0.85rem;"
-            data-bs-toggle="modal"
-            data-bs-target="#modalTambahPelanggan">
-        Tambah Pelanggan
-    </button>
-</div>
+                    <button class="btn btn-dark rounded-pill px-4 shadow-sm fw-bold"
+                            style="font-size: 0.85rem;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalTambahPelanggan">
+                        Tambah Pelanggan
+                    </button>
+                </div>
                 
                 <div class="table-responsive px-4 pb-4">
                     <table class="table table-hover align-middle w-100">
@@ -105,21 +112,21 @@
                                             <div class="modal-body p-4 pt-0">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label small fw-bold text-muted">NAMA</label>
+                                                    <label class="form-label small fw-bold text-muted">Nama</label>
                                                     <input type="text" name="nama_pelanggan"
                                                            class="form-control bg-light border-0 rounded-3 py-2"
                                                            value="{{ $p->nama_pelanggan }}" required>
                                                 </div>
 
                                                 <div class="mb-3">
-                                                    <label class="form-label small fw-bold text-muted">ALAMAT</label>
+                                                    <label class="form-label small fw-bold text-muted">Alamat</label>
                                                     <textarea name="alamat"
                                                               class="form-control bg-light border-0 rounded-3 py-2"
                                                               rows="3" required>{{ $p->alamat }}</textarea>
                                                 </div>
 
                                                 <div class="mb-3">
-                                                    <label class="form-label small fw-bold text-muted">NO HP</label>
+                                                    <label class="form-label small fw-bold text-muted">Kontak</label>
                                                     <input type="text" name="no_hp"
                                                            class="form-control bg-light border-0 rounded-3 py-2 fw-bold text-dark"
                                                            value="{{ $p->no_hp }}" required>
@@ -170,21 +177,21 @@
                 <div class="modal-body p-4 pt-0">
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">NAMA</label>
+                        <label class="form-label small fw-bold text-muted">Nama</label>
                         <input type="text" name="nama_pelanggan"
                                class="form-control bg-light border-0 rounded-3 py-2"
                                required>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">ALAMAT</label>
+                        <label class="form-label small fw-bold text-muted">Alamat</label>
                         <textarea name="alamat"
                                   class="form-control bg-light border-0 rounded-3 py-2"
                                   rows="3" required></textarea>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">NO HP</label>
+                        <label class="form-label small fw-bold text-muted">Kontak</label>
                         <input type="text" name="no_hp"
                                class="form-control bg-light border-0 rounded-3 py-2"
                                required>

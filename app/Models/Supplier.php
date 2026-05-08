@@ -18,9 +18,8 @@ class Supplier extends Model
 
     public $timestamps = true;
 
-    // // Relasi (AKTIFKAN, ini penting nanti)
-    // public function barangMasuk()
-    // {
-    //     return $this->hasMany(BarangMasuk::class, 'supplier_id_supplier', 'id_supplier');
-    // }
+    public function barangMasuk()
+    {
+        return $this->hasMany(BarangMasuk::class, 'supplier_id_supplier', 'id_supplier');
+    }
 }

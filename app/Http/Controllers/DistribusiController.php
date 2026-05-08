@@ -24,7 +24,7 @@ class DistribusiController extends Controller
             'pelanggan',
             'karyawan',
             'user'
-        ])->latest()->get();
+        ])->latest('tanggal_keluar')->get();
 
         $produk = Produk::all();
         $pelanggan = Pelanggan::all();
@@ -49,8 +49,7 @@ class DistribusiController extends Controller
         $request->validate([
             'pelanggan_id_pelanggan' => 'required',
             'karyawan_id_karyawan' => 'required',
-            'tanggal' => 'required|date',
-
+            'tanggal' => 'required',
             'produk_id_produk.*' => 'required',
             'jumlah.*' => 'required|numeric|min:1',
         ]);
@@ -77,10 +76,15 @@ class DistribusiController extends Controller
                 // ambil produk
                 $produk = Produk::findOrFail($produkId);
 
-                // jumlah
+                // jumlah yang diminta
                 $jumlah = $request->jumlah[$index];
 
-                // subtotal otomatis
+                // VALIDASI STOK PRODUK (Pencegahan jika stok 0 atau kurang)
+                if ($produk->stok_produk < $jumlah) {
+                    DB::rollBack(); 
+                    return redirect()->back()->with('error', 'Gagal! Stok ' . $produk->jenis_es . ' tidak mencukupi. Sisa stok saat ini: ' . $produk->stok_produk . ' pack.');
+                }
+
                 $subtotal = $produk->harga_jual * $jumlah;
 
                 // simpan detail
@@ -96,6 +100,10 @@ class DistribusiController extends Controller
                     // default null
                     'keterangan_gagal' => null
                 ]);
+
+                // pengurangan stok produk
+                $produk->stok_produk -= $jumlah;
+                $produk->save();
             }
 
             DB::commit();
@@ -108,8 +116,7 @@ class DistribusiController extends Controller
         } catch (\Exception $e) {
 
             DB::rollBack();
-
-            dd($e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi Kesalahan: ' . $e->getMessage());
 
         }
     }
@@ -124,19 +131,20 @@ class DistribusiController extends Controller
         ]);
 
         $detail = DetailDistribusi::findOrFail($id);
-
         $detail->status_pengiriman = $request->status_pengiriman;
 
         // kalau gagal
         if ($request->status_pengiriman == 'gagal') {
 
-            $detail->keterangan_gagal =
-                $request->keterangan_gagal;
+            $detail->keterangan_gagal = $request->keterangan_gagal;
+
+            // kembalikan stok karena pengiriman gagal
+            $produk = Produk::findOrFail($detail->produk_id_produk);
+            $produk->stok_produk += $detail->jumlah;
+            $produk->save();
 
         } else {
-
             $detail->keterangan_gagal = null;
-
         }
 
         $detail->save();
@@ -148,39 +156,10 @@ class DistribusiController extends Controller
     }
 
     // =========================
-    // HAPUS DISTRIBUSI
+    // HAPUS DISTRIBUSI (DIBLOKIR)
     // =========================
-    public function destroy($id)
-    {
-        DB::beginTransaction();
-
-        try {
-
-            // ambil distribusi
-            $distribusi = Distribusi::findOrFail($id);
-
-            // hapus detail
-            DetailDistribusi::where(
-                'distribusi_id_distribusi',
-                $id
-            )->delete();
-
-            // hapus header
-            $distribusi->delete();
-
-            DB::commit();
-
-            return redirect()->back()->with(
-                'success',
-                'Distribusi berhasil dihapus!'
-            );
-
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            dd($e->getMessage());
-
-        }
-    }
+    // public function destroy($id)
+    // {
+    //     return redirect()->back()->with('error', 'Data distribusi bersifat permanen dan tidak dapat dihapus!');
+    // }
 }

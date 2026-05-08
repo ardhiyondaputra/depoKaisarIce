@@ -32,7 +32,7 @@
         
         @if(Auth::user()->role === 'admin')
         <a href="{{ route('supplier.index') }}" class="nav-link {{ request()->routeIs('supplier.index') ? 'active bg-dark text-white' : 'text-dark' }} mb-1 rounded-3">
-            <i class="bi bi-truck{{ request()->routeIs('supplier.index') ? '-fill' : '' }} me-2"></i> Supplier
+            <i class="bi bi-truck me-2"></i> Supplier
         </a>
         <a href="{{ route('pelanggan.index') }}" class="nav-link {{ request()->routeIs('pelanggan.index') ? 'active bg-dark text-white' : 'text-dark' }} mb-1 rounded-3">
             <i class="bi bi-people{{ request()->routeIs('pelanggan.index') ? '-fill' : '' }} me-2"></i> Pelanggan
@@ -55,7 +55,7 @@
 
         <small class="text-muted fw-bold text-uppercase mt-3 mb-2">Pengaturan</small>
         <a href="{{ route('profile.edit') }}" class="nav-link {{ request()->routeIs('profile.edit') ? 'active bg-dark text-white' : 'text-dark' }} mb-1 rounded-3">
-            <i class="bi bi-person-circle{{ request()->routeIs('profile.edit') ? '-fill' : '' }} me-2"></i> Profil
+            <i class="bi bi-person-circle"></i> Profil
         </a>
     </div>
 </div>

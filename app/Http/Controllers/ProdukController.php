@@ -23,7 +23,13 @@ class ProdukController extends Controller
             'harga_jual' => 'required|numeric',
         ]);
 
-        Produk::create($request->all());
+        // Produk::create($request->all());
+        Produk::create([
+            'jenis_es' => $request->jenis_es,
+            'ukuran_pack' => $request->ukuran_pack,
+            'harga_jual' => $request->harga_jual,
+            'stok_produk' => 0
+        ]);
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan!');
     }
 
@@ -43,15 +49,10 @@ class ProdukController extends Controller
     {
         $produk = Produk::findOrFail($id_produk);
 
-        // Validasi Relasi: Cek apakah id_produk ini sudah ada di tabel transaksi/stok
-        // if ($produk->detailBarangMasuk()->exists() || 
-        //     $produk->detailDistribusi()->exists() || 
-        //     $produk->stok()->exists() ||
-        //     $produk->riwayatStok()->exists()) {
-            
-        //     return redirect()->back()->with('error', 'Produk tidak dapat dihapus karena sudah memiliki histori transaksi atau data stok!');
-        // }
-
+        if ($produk->detailBarangMasuk()->exists() || $produk->detailDistribusi()->exists()) {
+            return redirect()->back()->with('error', 'Produk tidak dapat dihapus karena sudah memiliki riwayat transaksi (Barang Masuk / Distribusi)!');
+        }
+        
         $produk->delete();
         return redirect()->back()->with('success', 'Produk berhasil dihapus!');
     }

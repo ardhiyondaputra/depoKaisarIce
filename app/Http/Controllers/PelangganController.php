@@ -8,7 +8,7 @@ use App\Models\Pelanggan;
 
 class PelangganController extends Controller
 {
-    // 🔹 TAMPIL DATA
+    // TAMPIL DATA
     public function index()
     {
         if (Auth::user()->role !== 'admin') {
@@ -20,7 +20,7 @@ class PelangganController extends Controller
         return view('pelanggan.index', compact('pelanggan'));
     }
 
-    // 🔹 SIMPAN DATA
+    // SIMPAN DATA
     public function store(Request $request)
     {
         if (Auth::user()->role !== 'admin') {
@@ -38,7 +38,7 @@ class PelangganController extends Controller
         return redirect()->back()->with('success', 'Data pelanggan berhasil ditambahkan');
     }
 
-    // 🔹 UPDATE DATA
+    // UPDATE DATA
     public function update(Request $request, $id)
     {
         $pelanggan = Pelanggan::findOrFail($id);
@@ -54,10 +54,15 @@ class PelangganController extends Controller
         return redirect()->back()->with('success', 'Data berhasil diupdate');
     }
 
-    // 🔹 HAPUS DATA
+    // HAPUS DATA
     public function destroy($id)
     {
         $pelanggan = Pelanggan::findOrFail($id);
+        
+        if ($pelanggan->distribusi()->exists()) {
+            return redirect()->back()->with('error', 'Pelanggan tidak dapat dihapus karena sudah memiliki riwayat transaksi!');
+        }
+
         $pelanggan->delete();
 
         return redirect()->back()->with('success', 'Data berhasil dihapus');
